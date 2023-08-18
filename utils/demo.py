@@ -50,7 +50,7 @@ def load_models(checkpoint_path='data/renderer.pth', ntex_path='data/ntex.pth', 
     return renderer, nstack
 
 def build_smplx_model_dict(smplx_model_dir, device):
-    gender2filename = dict(neutral='SMPLX_NEUTRAL.pkl', male='SMPLX_MALE.pkl', female='SMPLX_FEMALE.pkl')
+    gender2filename = dict(neutral='SMPLX_NEUTRAL.npz', male='SMPLX_MALE.npz', female='SMPLX_FEMALE.npz')
     gender2path = {k:os.path.join(smplx_model_dir, v) for (k, v) in gender2filename.items()}
     gender2model = {k:smplx.body_models.SMPLX(v).to(device) for (k, v) in gender2path.items()}
 
@@ -59,11 +59,11 @@ def build_smplx_model_dict(smplx_model_dir, device):
 
 class DemoInferer():
 
-    def __init__(self, checkpoint_path, ntex_path, smplx_models_dir, imsize=512, pid_list=None, v_inds_path='data/v_inds.npy',
+    def __init__(self, checkpoint_path, ntex_path, smplx_models_dir, texsegm_path, imsize=512, pid_list=None, v_inds_path='data/v_inds.npy',
                  device='cuda:0'):
         self.smplx_models_dict = build_smplx_model_dict(smplx_models_dir, device)
         # smplx.body_models.SMPLX(smplx_model_path).to(device)
-        self.renderer, self.nstack = load_models(checkpoint_path, ntex_path, pid_list=pid_list)
+        self.renderer, self.nstack = load_models(checkpoint_path, ntex_path, texsegm_path, pid_list=pid_list)
         self.v_inds = torch.LongTensor(np.load(v_inds_path)).to(device)
         self.imsize = imsize
 

@@ -1,4 +1,5 @@
-FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
+# FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
+FROM  nvidia/cuda:12.1.0-devel-ubuntu18.04
 
 ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -97,5 +98,5 @@ RUN conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
 
 # docker setup
 WORKDIR /
-ENTRYPOINT ["fixuid", "-q"]
-CMD ["fixuid", "-q", "bash"]
+#ENTRYPOINT ["fixuid", "-q"]
+#CMD ["fixuid", "-q", "bash"]
